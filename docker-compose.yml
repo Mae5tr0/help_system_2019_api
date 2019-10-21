@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:11
+    environment:
+      - POSTGRES_USER=help_system_user
+      - POSTGRES_PASSWORD=pwd0123456789
+      - POSTGRES_DB=help_system
+    ports:
+      - "5455:5432"
+    networks:
+      - help_system
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+
+networks:
+  help_system:
