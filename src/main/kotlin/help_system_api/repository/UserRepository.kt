@@ -11,5 +11,5 @@ interface UserRepository: JpaRepository<User, Long> {
 
     fun findByIdIn(userIds: List<Long>): List<User>
 
-    fun existsByEmail(email: String): Boolean?
+    fun existsByEmail(email: String): Boolean
 }

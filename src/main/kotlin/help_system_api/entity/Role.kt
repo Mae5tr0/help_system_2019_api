@@ -11,10 +11,10 @@ import javax.validation.constraints.Size
 
 @Entity
 @Table(name = "roles")
-data class Role(
+class Role(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Int,
+        val id: Long,
 
         @Enumerated(EnumType.STRING)
         @NaturalId
