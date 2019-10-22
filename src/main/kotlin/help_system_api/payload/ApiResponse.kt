@@ -1,3 +1,6 @@
 package help_system_api.payload
 
-class ApiResponse(var success: Boolean?, var message: String?)
+data class ApiResponse(
+    val success: Boolean?,
+    val message: String?
+)

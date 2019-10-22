@@ -12,12 +12,8 @@ import javax.validation.constraints.Size
 @Entity
 @Table(name = "roles")
 class Role(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long,
-
         @Enumerated(EnumType.STRING)
         @NaturalId
         @Column(length = 60)
-        val name: RoleName
-)
+        var name: RoleName
+): BaseEntity()

@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 import java.util.*
 import io.jsonwebtoken.*
+import io.jsonwebtoken.io.Decoders
+import io.jsonwebtoken.security.Keys
 import kotlin.reflect.jvm.internal.impl.utils.CollectionsKt.compact
 
 
@@ -19,19 +21,18 @@ class JwtTokenProvider {
     private val jwtExpirationInMs: Int = 0
 
     fun generateToken(authentication: Authentication): String {
-
         val userPrincipal = authentication.getPrincipal() as UserPrincipal
+        val keyBytes = Decoders.BASE64.decode(jwtSecret)
+        val key = Keys.hmacShaKeyFor(keyBytes)
 
         val now = Date()
         val expiryDate = Date(now.getTime() + jwtExpirationInMs)
-
-
 
         return Jwts.builder()
                 .setSubject(java.lang.Long.toString(userPrincipal.id!!))
                 .setIssuedAt(Date())
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact()
     }
 

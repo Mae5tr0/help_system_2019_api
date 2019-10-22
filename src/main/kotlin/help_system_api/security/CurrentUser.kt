@@ -8,6 +8,5 @@ import java.lang.annotation.RetentionPolicy
 
 //@Target(ElementType.PARAMETER, ElementType.TYPE)
 //@Retention(RetentionPolicy.RUNTIME)
-@Documented
 @AuthenticationPrincipal
 annotation class CurrentUser

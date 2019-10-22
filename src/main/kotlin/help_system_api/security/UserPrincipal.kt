@@ -9,15 +9,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.util.*
 
 class UserPrincipal(
-        val id: Long?,
+    val id: Long?,
 
-        @field:JsonIgnore
-        val email: String,
+    @field:JsonIgnore
+    val email: String,
 
-        @field:JsonIgnore
-        private val password: String,
+    @field:JsonIgnore
+    private val password: String,
 
-        private val authorities: Collection<GrantedAuthority>
+    private val authorities: Collection<GrantedAuthority>
 ) : UserDetails {
 
     override fun getUsername(): String {
@@ -65,7 +65,7 @@ class UserPrincipal(
 //            ).collect(Collectors.toList<T>())
 
             return UserPrincipal(
-                    user.getId(),
+                    user.id,
                     user.email,
                     user.password,
                     listOf<GrantedAuthority>()

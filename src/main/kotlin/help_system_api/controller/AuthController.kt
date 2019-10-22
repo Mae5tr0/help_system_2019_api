@@ -30,61 +30,50 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/auth")
-class AuthController {
-
-    @Autowired
-    internal var authenticationManager: AuthenticationManager? = null
-
-    @Autowired
-    internal var userRepository: UserRepository? = null
-
-    @Autowired
-    internal var roleRepository: RoleRepository? = null
-
-    @Autowired
-    internal var passwordEncoder: PasswordEncoder? = null
-
-    @Autowired
-    internal var tokenProvider: JwtTokenProvider? = null
+class AuthController(
+    private val authenticationManager: AuthenticationManager,
+    private val userRepository: UserRepository,
+//    private val roleRepository: RoleRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val tokenProvider: JwtTokenProvider
+) {
 
     @PostMapping("/signin")
     fun authenticateUser(@Valid @RequestBody loginRequest: LoginRequest): ResponseEntity<*> {
-
-        val authentication = authenticationManager!!.authenticate(
-                UsernamePasswordAuthenticationToken(
-                        loginRequest.usernameOrEmail,
-                        loginRequest.password
-                )
+        val authentication = authenticationManager.authenticate(
+            UsernamePasswordAuthenticationToken(
+                loginRequest.email,
+                loginRequest.password
+            )
         )
 
         SecurityContextHolder.getContext().authentication = authentication
 
-        val jwt = tokenProvider!!.generateToken(authentication)
+        val jwt = tokenProvider.generateToken(authentication)
         return ResponseEntity.ok(JwtAuthenticationResponse(jwt))
     }
 
     @PostMapping("/signup")
     fun registerUser(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<*> {
-        if (userRepository!!.existsByEmail(signUpRequest.email)) {
+        if (userRepository.existsByEmail(signUpRequest.email)) {
             return ResponseEntity(ApiResponse(false, "Email Address already in use!"),
-                    HttpStatus.BAD_REQUEST)
+                HttpStatus.BAD_REQUEST)
         }
 
         // Creating user's account
-        val user = User(email = signUpRequest.email, password = signUpRequest.password)
-
-//        user.setPassword(passwordEncoder!!.encode(user.getPassword()))
+        val user = User(email = signUpRequest.email, password = "")
+        user.password = passwordEncoder.encode(signUpRequest.password)
 
 //        val userRole = roleRepository!!.findByName(RoleName.ROLE_USER)
 //                .orElseThrow { AppException("User Role not set.") }
 
 //        user.setRoles(Collections.singleton(userRole))
 
-        val result = userRepository!!.save<User>(user)
+        val result = userRepository.save(user)
 
         val location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{id}")
-                .buildAndExpand(result.getId()).toUri()
+                .buildAndExpand(result.id).toUri()
 
         return ResponseEntity.created(location).body(ApiResponse(true, "User registered successfully"))
     }

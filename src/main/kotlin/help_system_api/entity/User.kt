@@ -11,25 +11,21 @@ import javax.validation.constraints.Size
 
 @Entity
 @Table(name = "users")
-//@EntityListeners(AuditingEntityListener::class.java)
+@EntityListeners(AuditingEntityListener::class)
 //@JsonIgnoreProperties(
 //        value = {"createdAt", "updatedAt"},
 //        allowGetters = true
 //)
 class User(
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    val id: Long,
-
     @Column(nullable = false, unique = true)
     @NotBlank
     @Size(max = 40)
-    val email: String,
+    var email: String,
 
     @Column(nullable = false)
     @NotBlank
     @Size(max = 100)
-    val password: String,
+    var password: String,
 
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(name = "user_roles",
@@ -40,10 +36,10 @@ class User(
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    val createdAt: Date? = null,
+    var createdAt: Date? = null,
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    val updatedAt: Date? = null
-) : AbstractJpaPersistable<Long>()
+    var updatedAt: Date? = null
+) : BaseEntity()

@@ -27,7 +27,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.postgresql:postgresql")
 	implementation("io.jsonwebtoken:jjwt-api:0.10.7")
-	implementation("org.bouncycastle:bcprov-jdk15on:1.60")
+	implementation("io.jsonwebtoken:jjwt-impl:0.10.7")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.10.7")
+
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+//	implementation("org.bouncycastle:bcprov-jdk15on:1.60")
 //	implementation("org.springframework.boot:spring-boot-starter-actuator")
 //	implementation("org.springframework.boot:spring-boot-starter-logging")
 

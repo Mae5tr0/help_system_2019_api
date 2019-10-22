@@ -10,16 +10,14 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-class CustomUserDetailsService : UserDetailsService {
-
-    @Autowired
-    internal var userRepository: UserRepository? = null
+class CustomUserDetailsService(
+    val userRepository: UserRepository
+) : UserDetailsService {
 
     @Transactional
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(email: String): UserDetails {
-        // Let people login with either username or email
-        val user = userRepository!!.findByEmail(email)
+        val user = userRepository.findByEmail(email)
                 .orElseThrow({ UsernameNotFoundException("User not found with email : $email") })
 
         return UserPrincipal.create(user)
@@ -27,7 +25,7 @@ class CustomUserDetailsService : UserDetailsService {
 
     @Transactional
     fun loadUserById(id: Long): UserDetails {
-        val user = userRepository!!.findById(id).orElseThrow<RuntimeException> { ResourceNotFoundException("User", "id", id) }
+        val user = userRepository.findById(id).orElseThrow<RuntimeException> { ResourceNotFoundException("User", "id", id) }
 
         return UserPrincipal.create(user)
     }
