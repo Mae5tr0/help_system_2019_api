@@ -8,8 +8,6 @@ import java.util.*
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import kotlin.reflect.jvm.internal.impl.utils.CollectionsKt.compact
-
 
 @Component
 class JwtTokenProvider {
@@ -29,7 +27,7 @@ class JwtTokenProvider {
         val expiryDate = Date(now.getTime() + jwtExpirationInMs)
 
         return Jwts.builder()
-                .setSubject(java.lang.Long.toString(userPrincipal.id!!))
+                .setSubject(java.lang.Long.toString(userPrincipal.id))
                 .setIssuedAt(Date())
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256)

@@ -1,4 +1,4 @@
-package help_system_api.payload
+package help_system_api.dto.auth
 
 import javax.validation.constraints.Email
 import javax.validation.constraints.Size

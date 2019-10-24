@@ -1,25 +1,18 @@
 package help_system_api.security
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import help_system_api.entity.User
+import help_system_api.model.RoleName
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.GrantedAuthority
-import java.util.stream.Collectors
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.util.*
 
 class UserPrincipal(
-    val id: Long?,
-
-    @field:JsonIgnore
+    val id: Long,
     val email: String,
-
-    @field:JsonIgnore
-    private val password: String,
-
-    private val authorities: Collection<GrantedAuthority>
+    val role: RoleName,
+    private val password: String
 ) : UserDetails {
-
     override fun getUsername(): String {
         return email
     }
@@ -29,7 +22,7 @@ class UserPrincipal(
     }
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
-        return authorities
+        return listOf(SimpleGrantedAuthority(role.toString()))
     }
 
     override fun isAccountNonExpired(): Boolean {
@@ -61,14 +54,11 @@ class UserPrincipal(
 
     companion object {
         fun create(user: User): UserPrincipal {
-//            val authorities = user.getRoles().stream().map({ role -> SimpleGrantedAuthority(role.getName().name()) }
-//            ).collect(Collectors.toList<T>())
-
             return UserPrincipal(
-                    user.id,
-                    user.email,
-                    user.password,
-                    listOf<GrantedAuthority>()
+                user.id!!,
+                user.email,
+                user.role,
+                user.password
             )
         }
     }

@@ -1,6 +1,5 @@
 package help_system_api.entity
 
-import org.springframework.data.util.ProxyUtils
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id

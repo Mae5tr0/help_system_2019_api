@@ -3,8 +3,6 @@ package help_system_api.config
 import help_system_api.security.CustomUserDetailsService
 import help_system_api.security.JwtAuthenticationEntryPoint
 import help_system_api.security.JwtAuthenticationFilter
-import org.springframework.http.HttpMethod
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -23,8 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 class SecurityConfig(
-    val customUserDetailsService: CustomUserDetailsService,
-    val unauthorizedHandler: JwtAuthenticationEntryPoint
+        val customUserDetailsService: CustomUserDetailsService,
+        val unauthorizedHandler: JwtAuthenticationEntryPoint
 ) : WebSecurityConfigurerAdapter() {
 
     @Bean
@@ -35,8 +33,8 @@ class SecurityConfig(
     @Throws(Exception::class)
     override fun configure(authenticationManagerBuilder: AuthenticationManagerBuilder) {
         authenticationManagerBuilder
-            .userDetailsService(customUserDetailsService)
-            .passwordEncoder(passwordEncoder())
+                .userDetailsService(customUserDetailsService)
+                .passwordEncoder(passwordEncoder())
     }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -53,35 +51,31 @@ class SecurityConfig(
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http
-            .cors()
+                .cors()
                 .and()
-            .csrf()
+                .csrf()
                 .disable()
-            .exceptionHandling()
+                .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
-            .sessionManagement()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-            .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/",
-                    "/favicon.ico",
-                    "/**/*.png",
-                    "/**/*.gif",
-                    "/**/*.svg",
-                    "/**/*.jpg",
-                    "/**/*.html",
-                    "/**/*.css",
-                    "/**/*.js")
-                        .permitAll()
+                        "/favicon.ico",
+                        "/**/*.png",
+                        "/**/*.gif",
+                        "/**/*.svg",
+                        "/**/*.jpg",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js")
+                .permitAll()
                 .antMatchers("/api/auth/**")
-                    .permitAll()
-                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
-                    .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
-                    .permitAll()
+                .permitAll()
                 .anyRequest()
-                    .authenticated()
+                .authenticated()
 
         // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)

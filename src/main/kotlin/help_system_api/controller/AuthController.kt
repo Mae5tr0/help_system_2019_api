@@ -1,50 +1,42 @@
 package help_system_api.controller
 
-import help_system_api.payload.ApiResponse
+import help_system_api.dto.ApiResponse
 import org.springframework.http.ResponseEntity
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import help_system_api.exception.AppException
-import help_system_api.model.RoleName
-import ch.qos.logback.core.joran.spi.ConsoleTarget.findByName
-import help_system_api.entity.User
-import org.apache.tomcat.jni.SSL.setPassword
-import org.springframework.http.HttpStatus
-import help_system_api.payload.SignUpRequest
+import help_system_api.dto.auth.SignUpRequest
 import org.springframework.web.bind.annotation.RequestBody
 import javax.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
-import help_system_api.payload.JwtAuthenticationResponse
+import help_system_api.dto.auth.JwtAuthenticationResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.postgresql.gss.MakeGSS.authenticate
-import help_system_api.payload.LoginRequest
+import help_system_api.dto.auth.SignInRequest
 import help_system_api.security.JwtTokenProvider
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.crypto.password.PasswordEncoder
-import help_system_api.repository.RoleRepository
 import help_system_api.repository.UserRepository
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-
+import help_system_api.dto.user.UserIdentityAvailability
+import help_system_api.service.UserService
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
-    private val authenticationManager: AuthenticationManager,
-    private val userRepository: UserRepository,
-//    private val roleRepository: RoleRepository,
-    private val passwordEncoder: PasswordEncoder,
-    private val tokenProvider: JwtTokenProvider
+        private val userService: UserService,
+        private val authenticationManager: AuthenticationManager,
+        private val userRepository: UserRepository,
+        private val tokenProvider: JwtTokenProvider
 ) {
 
     @PostMapping("/signin")
-    fun authenticateUser(@Valid @RequestBody loginRequest: LoginRequest): ResponseEntity<*> {
+    fun authenticateUser(@Valid @RequestBody signInRequest: SignInRequest): ResponseEntity<*> {
         val authentication = authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(
-                loginRequest.email,
-                loginRequest.password
-            )
+                UsernamePasswordAuthenticationToken(
+                        signInRequest.email,
+                        signInRequest.password
+                )
         )
 
         SecurityContextHolder.getContext().authentication = authentication
@@ -54,27 +46,20 @@ class AuthController(
     }
 
     @PostMapping("/signup")
-    fun registerUser(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<*> {
-        if (userRepository.existsByEmail(signUpRequest.email)) {
-            return ResponseEntity(ApiResponse(false, "Email Address already in use!"),
-                HttpStatus.BAD_REQUEST)
-        }
-
-        // Creating user's account
-        val user = User(email = signUpRequest.email, password = "")
-        user.password = passwordEncoder.encode(signUpRequest.password)
-
-//        val userRole = roleRepository!!.findByName(RoleName.ROLE_USER)
-//                .orElseThrow { AppException("User Role not set.") }
-
-//        user.setRoles(Collections.singleton(userRole))
-
-        val result = userRepository.save(user)
+    fun registerUser(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<ApiResponse> {
+        val user = userService.createUser(email = signUpRequest.email, password = signUpRequest.password)
 
         val location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{id}")
-                .buildAndExpand(result.id).toUri()
+                .buildAndExpand(user.id).toUri()
 
         return ResponseEntity.created(location).body(ApiResponse(true, "User registered successfully"))
+    }
+
+    @GetMapping("/checkEmailAvailability")
+    fun checkEmailAvailability(@RequestParam(value = "email") email: String): UserIdentityAvailability {
+        val isAvailable = !userRepository.existsByEmail(email)
+
+        return UserIdentityAvailability(isAvailable)
     }
 }
