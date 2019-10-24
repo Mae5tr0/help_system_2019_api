@@ -32,7 +32,7 @@ class UserController(
         val users = userService.getAllUsers(page, size)
 
         return PagedResponse(
-                users.content.map { user -> UserSummary(email = user.email, role = user.role)},
+                users.content.map { user -> UserSummary(email = user.email, role = user.role) },
                 users.number,
                 users.size,
                 users.totalElements

@@ -1,8 +1,5 @@
 package com.help.api
 
-import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
-
 //@RunWith(SpringRunner::class)
 //@SpringBootTest(classes = arrayOf(KotlinDemoApplication::class),
 //		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

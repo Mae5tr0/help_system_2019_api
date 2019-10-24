@@ -1,16 +1,16 @@
 package help_system_api.security
 
 import help_system_api.exception.ResourceNotFoundException
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import help_system_api.repository.UserRepository
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
 class CustomUserDetailsService(
-    val userRepository: UserRepository
+        val userRepository: UserRepository
 ) : UserDetailsService {
 
     @Transactional

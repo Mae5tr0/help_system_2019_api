@@ -1,13 +1,13 @@
 package help_system_api.security
 
-import java.security.SignatureException
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.security.core.Authentication
-import org.springframework.stereotype.Component
-import java.util.*
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.core.Authentication
+import org.springframework.stereotype.Component
+import java.security.SignatureException
+import java.util.*
 
 @Component
 class JwtTokenProvider {
@@ -19,12 +19,12 @@ class JwtTokenProvider {
     private val jwtExpirationInMs: Int = 0
 
     fun generateToken(authentication: Authentication): String {
-        val userPrincipal = authentication.getPrincipal() as UserPrincipal
+        val userPrincipal = authentication.principal as UserPrincipal
         val keyBytes = Decoders.BASE64.decode(jwtSecret)
         val key = Keys.hmacShaKeyFor(keyBytes)
 
         val now = Date()
-        val expiryDate = Date(now.getTime() + jwtExpirationInMs)
+        val expiryDate = Date(now.time + jwtExpirationInMs)
 
         return Jwts.builder()
                 .setSubject(java.lang.Long.toString(userPrincipal.id))
@@ -38,9 +38,9 @@ class JwtTokenProvider {
         val claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
-                .getBody()
+                .body
 
-        return java.lang.Long.parseLong(claims.getSubject())
+        return java.lang.Long.parseLong(claims.subject)
     }
 
     fun validateToken(authToken: String): Boolean {

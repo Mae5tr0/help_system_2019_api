@@ -1,25 +1,20 @@
 package help_system_api.controller
 
 import help_system_api.dto.ApiResponse
-import org.springframework.http.ResponseEntity
-import help_system_api.dto.auth.SignUpRequest
-import org.springframework.web.bind.annotation.RequestBody
-import javax.validation.Valid
-import org.springframework.web.bind.annotation.PostMapping
 import help_system_api.dto.auth.JwtAuthenticationResponse
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import help_system_api.dto.auth.SignInRequest
-import help_system_api.security.JwtTokenProvider
-import help_system_api.repository.UserRepository
-import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import help_system_api.dto.auth.SignUpRequest
 import help_system_api.dto.user.UserIdentityAvailability
+import help_system_api.repository.UserRepository
+import help_system_api.security.JwtTokenProvider
 import help_system_api.service.UserService
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/auth")

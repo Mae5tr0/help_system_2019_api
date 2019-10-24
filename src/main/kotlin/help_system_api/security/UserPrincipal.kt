@@ -2,16 +2,16 @@ package help_system_api.security
 
 import help_system_api.entity.User
 import help_system_api.model.RoleName
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
 class UserPrincipal(
-    val id: Long,
-    val email: String,
-    val role: RoleName,
-    private val password: String
+        val id: Long,
+        val email: String,
+        val role: RoleName,
+        private val password: String
 ) : UserDetails {
     override fun getUsername(): String {
         return email
@@ -22,7 +22,7 @@ class UserPrincipal(
     }
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
-        return listOf(SimpleGrantedAuthority(role.toString()))
+        return listOf(SimpleGrantedAuthority("ROLE_$role"))
     }
 
     override fun isAccountNonExpired(): Boolean {
@@ -55,10 +55,10 @@ class UserPrincipal(
     companion object {
         fun create(user: User): UserPrincipal {
             return UserPrincipal(
-                user.id!!,
-                user.email,
-                user.role,
-                user.password
+                    user.id!!,
+                    user.email,
+                    user.role,
+                    user.password
             )
         }
     }

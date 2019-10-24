@@ -5,11 +5,11 @@ import help_system_api.exception.ResourceNotFoundException
 import help_system_api.model.RoleName
 import help_system_api.model.StatusName
 import help_system_api.repository.TicketRepository
-import org.springframework.stereotype.Service
 import help_system_api.repository.UserRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.stereotype.Service
 
 @Service
 class TicketService(
@@ -20,9 +20,9 @@ class TicketService(
         val user = userRepository.findById(userId).orElseThrow { ResourceNotFoundException("User", "id", userId) }
 
         val ticket = Ticket(
-            title = title,
-            content = content,
-            user = user
+                title = title,
+                content = content,
+                user = user
         )
 
         return ticketRepository.save(ticket)
