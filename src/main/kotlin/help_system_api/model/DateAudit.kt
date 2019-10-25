@@ -1,4 +1,4 @@
-package help_system_api.entity
+package help_system_api.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.data.annotation.CreatedDate

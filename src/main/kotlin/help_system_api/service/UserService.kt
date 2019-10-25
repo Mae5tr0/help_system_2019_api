@@ -1,6 +1,6 @@
 package help_system_api.service
 
-import help_system_api.entity.User
+import help_system_api.model.User
 import help_system_api.exception.ResourceAlreadyExists
 import help_system_api.exception.ResourceNotFoundException
 import help_system_api.model.RoleName

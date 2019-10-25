@@ -1,6 +1,6 @@
 package help_system_api.service
 
-import help_system_api.entity.Ticket
+import help_system_api.model.Ticket
 import help_system_api.exception.ResourceNotFoundException
 import help_system_api.model.RoleName
 import help_system_api.model.StatusName

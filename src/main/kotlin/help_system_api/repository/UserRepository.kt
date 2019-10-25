@@ -1,6 +1,6 @@
 package help_system_api.repository
 
-import help_system_api.entity.User
+import help_system_api.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.*

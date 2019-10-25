@@ -1,6 +1,5 @@
-package help_system_api.entity
+package help_system_api.model
 
-import help_system_api.model.StatusName
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size

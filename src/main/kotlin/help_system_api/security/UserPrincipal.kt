@@ -1,6 +1,6 @@
 package help_system_api.security
 
-import help_system_api.entity.User
+import help_system_api.model.User
 import help_system_api.model.RoleName
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority

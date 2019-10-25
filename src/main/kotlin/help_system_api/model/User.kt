@@ -1,6 +1,5 @@
-package help_system_api.entity
+package help_system_api.model
 
-import help_system_api.model.RoleName
 import org.hibernate.annotations.BatchSize
 import org.hibernate.annotations.NaturalId
 import javax.persistence.*

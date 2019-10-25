@@ -1,4 +1,4 @@
-package help_system_api.entity
+package help_system_api.model
 
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType

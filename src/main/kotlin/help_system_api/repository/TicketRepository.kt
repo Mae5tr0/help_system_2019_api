@@ -1,6 +1,6 @@
 package help_system_api.repository
 
-import help_system_api.entity.Ticket
+import help_system_api.model.Ticket
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
